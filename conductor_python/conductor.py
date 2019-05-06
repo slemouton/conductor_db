@@ -1,20 +1,28 @@
-# analyse et visualisation des donnÃ©es du projet conductorfollowing/Idea/Haapamaki
+# -*- coding: latin-1 -*-
+
+# analyse et visualisation des données du projet conductorfollowing/Idea/Haapamaki
 # serge lemouton 2019
 
 #for examples, see conductor_examples.py
 
 # todo
 # git repo + io
-# dans trouve1, tri les solutions par difference croissantes
+# plot markers
+# resample bars
 # function sdk
 # loading mubu data with easdif library (axel ?)
 # unit test
 
+# done
+# dans trouve1, tri les solutions par difference croissantes
+
 from typing import List, Any
 import numpy as np
 import copy
+import matplotlib
 import matplotlib.pyplot as plt
 import itertools
+matplotlib.use('MacOSX')
 
 class Sequence:
     def __init__(self):
@@ -49,16 +57,13 @@ class Sequence:
         return np.where(a == context)
 
     def trouve1(self, mesure, duration):
-        epsilon = 1000
         a = np.array(self.signature_list)
         indexes = np.where(a == mesure)
+  #      result: List[Any] = []
+        result = []
 
-        possible_bars = list(map(lambda x: (self.bar_list[x]), indexes[0].tolist()))
-        result: List[Any] = []
-        for b in possible_bars:
-            print("diff", b.duration - duration)
-            if (b.duration - duration < epsilon):
-                result.append(b)
+        result = list(map(lambda x: (self.bar_list[x]), indexes[0].tolist()))
+        result = sorted(result, key=lambda x: abs(x.duration - duration)) # tri par durees
         if (result.__len__() == 0):
             print("trouve1: not found")  # raise error
         return result
@@ -69,11 +74,13 @@ class Sequence:
         indexes = np.where(a == context)
 
         possible_bars = list(map(lambda x: (self.bar_list[x]), indexes[0].tolist()))
-        result: List[Any] = []
+        #result: List[Any] = []
+        result = []
         for b in possible_bars:
             print("diff",b.duration - duration)
             if (b.duration - duration < epsilon):
                 result.append(b)
+        result = sorted(result, key=lambda x: abs(x.duration - duration)) # tri par durees
         if (result.__len__()==0):
             print ("not found") # raise error
         return result
@@ -107,7 +114,7 @@ class Sequence:
         segments = duplets(markers)
         for s, m in zip(mesures, segments):
             found_bars = self.trouve1(s, m[1] - m[0])
-            found_bar = found_bars[0] # take the
+            found_bar = found_bars[0] # take the first one
             b = copy.copy(found_bar)
             result.bar_list.append(b)
         return result
@@ -187,4 +194,23 @@ def markers_to_list(markers_list):
 def plot_bars(bar_l):
     map(plot, bar_l)
 
+
+
+# def trouve_sort(seq, mesure, duration):
+#     epsilon = 1000
+#     a = np.array(seq.signature_list)
+#     indexes = np.where(a == mesure)
+#
+#     possible_bars = list(map(lambda x: (seq.bar_list[x]), indexes[0].tolist()))
+#     result: List[Any] = []
+#     for b in possible_bars:
+#         print("diff", b.duration - duration)
+#         if (b.duration - duration < epsilon):
+#             result.append(b)
+#     if (result.__len__() == 0):
+#         print("trouve1: not found")  # raise error
+#     print(list(map(lambda x: (x.duration),result)))
+#     result =sorted (result,key=lambda x:abs(x.duration - duration))
+#     print(list(map(lambda x: (x.duration),result)))
+#     return result
 
