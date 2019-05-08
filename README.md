@@ -1,0 +1,1 @@
+Initially developed for IDEA by Sampo Haapamaki, this project includes documentations and a database of conductor gesture recorded during the research
