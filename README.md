@@ -1,4 +1,7 @@
-<<<<<<< HEAD
+# this repository is obsolete :
+# -> Goto https://git.forum.ircam.fr/Serge.Lemouton
+
+
 # conductor_db
 a database of conductor gesture recorded for the IDEA project
 
